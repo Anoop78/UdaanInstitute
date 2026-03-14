@@ -41,6 +41,76 @@ function getNavHTML(activePage) {
   </nav>`;
 }
 
+const slides = document.querySelectorAll(".slide");
+const dots = document.querySelectorAll(".dot");
+const prev = document.querySelector(".prev");
+const next = document.querySelector(".next");
+
+let index = 0;
+let startX = 0;
+
+function showSlide(i){
+
+slides.forEach(s => s.classList.remove("active"));
+dots.forEach(d => d.classList.remove("active"));
+
+slides[i].classList.add("active");
+dots[i].classList.add("active");
+
+}
+
+function nextSlide(){
+
+index++;
+if(index >= slides.length) index = 0;
+showSlide(index);
+
+}
+
+function prevSlide(){
+
+index--;
+if(index < 0) index = slides.length - 1;
+showSlide(index);
+
+}
+
+next.onclick = nextSlide;
+prev.onclick = prevSlide;
+
+dots.forEach((dot,i)=>{
+
+dot.onclick = () => {
+index = i;
+showSlide(index);
+}
+
+});
+
+/* AUTO SLIDE */
+
+setInterval(nextSlide,5000);
+
+/* MOBILE SWIPE */
+
+document.querySelector(".hero-slider").addEventListener("touchstart",e=>{
+startX = e.touches[0].clientX;
+});
+
+document.querySelector(".hero-slider").addEventListener("touchend",e=>{
+
+let endX = e.changedTouches[0].clientX;
+
+if(startX - endX > 50){
+nextSlide();
+}
+
+if(endX - startX > 50){
+prevSlide();
+}
+
+});
+
 // ── FOOTER HTML ───────────────────────────────
 function getFooterHTML() {
   return `
